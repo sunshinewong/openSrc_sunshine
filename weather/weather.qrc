@@ -1,0 +1,39 @@
+<RCC>
+    <qresource prefix="/">
+        <file>icon/close.png</file>
+        <file>icon/reload.png</file>
+        <file>icon/b5.png</file>
+        <file>icon/b6.png</file>
+        <file>icon/b7.png</file>
+        <file>icon/b8.png</file>
+        <file>icon/b9.png</file>
+        <file>icon/b10.png</file>
+        <file>icon/b11.png</file>
+        <file>icon/b12.png</file>
+        <file>icon/b14.png</file>
+        <file>icon/b15.png</file>
+        <file>icon/b16.png</file>
+        <file>icon/b18.png</file>
+        <file>icon/b19.png</file>
+        <file>icon/b20.png</file>
+        <file>icon/b29.png</file>
+        <file>icon/b31.png</file>
+        <file>icon/d0.png</file>
+        <file>icon/d1.png</file>
+        <file>icon/d2.png</file>
+        <file>icon/d3.png</file>
+        <file>icon/d4.png</file>
+        <file>icon/d13.png</file>
+        <file>icon/n1.png</file>
+        <file>icon/n2.png</file>
+        <file>icon/n3.png</file>
+        <file>icon/n4.png</file>
+        <file>icon/n13.png</file>
+        <file>icon/na.png</file>
+        <file>icon/g.png</file>
+        <file>icon/tray.png</file>
+        <file>icon/min.png</file>
+        <file>icon/b17.png</file>
+        <file>icon/n0.png</file>
+    </qresource>
+</RCC>
