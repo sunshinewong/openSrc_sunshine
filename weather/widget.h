@@ -46,6 +46,7 @@ private:
     } type;
     //窗体移动记录
     QPoint windowPos,mousePos,dPos;
+    QTimer *timer;
     void initCityMap();
     void initLocation();
     void showGif();
@@ -62,6 +63,7 @@ private slots:
     void on_cityComboBox_currentIndexChanged(int index);
     void slotSysTray(QSystemTrayIcon::ActivationReason);
     void on_minBtn_clicked();
+    void slotTimeOut();
 };
 
 #endif // WIDGET_H

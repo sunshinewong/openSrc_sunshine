@@ -35,6 +35,10 @@ Widget::Widget(QWidget *parent) :
     tray->setIcon(QIcon(":/icon/tray.png"));
     tray->setContextMenu(trayMenu);
     tray->show();
+    timer=new QTimer(this);
+    connect(timer,SIGNAL(timeout()),this,SLOT(slotTimeOut()));
+    timer->start(1000);
+    ui->curDateTimeLabel->setText(QDateTime::currentDateTime().toString(tr("yyyy-MM-dd hh:mm:ss")));
     //开始请求默认地区的天气
     QTimer::singleShot(10,this,SLOT(slotInitCurTemp()));
 }
@@ -354,6 +358,11 @@ QString Widget::getWeeks(int wek)
     default:break;
     }
     return weekday;
+}
+void Widget::slotTimeOut()
+{
+    ui->curDateTimeLabel->setText(QDateTime::currentDateTime().toString(tr("yyyy-MM-dd hh:mm:ss")));
+    timer->start(1000);
 }
 //事件过滤器
 bool Widget::eventFilter(QObject *target, QEvent *e)
