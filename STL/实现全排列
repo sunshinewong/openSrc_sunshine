@@ -1,0 +1,27 @@
+在微博上看到对有人不会写全排列的吐槽，觉着好玩，就试着自己写了下字符串的全排列，当然根据这个可以推广他其他的场合应用；
+具体实现原理：首先1、将字符串的第一个字符与其他的后续（也包括第一个字符）的字符依次对换；
+2、将第一个字符和后面的其他的部分看成两部分，将后面的部分当成一个子字符串，继续进行第一步；
+3、采用递归的方式，实现上述的程序
+具体的代码如下：
+void getCombineArray(string& str,int index ,int length)
+{
+	if(index<length)
+	{
+	//一次将该字符串从位置index开始进行与第一个字符的兑换
+		for (int i=index;i<length;i++)
+		{
+			string tmp=str;
+			char c=tmp[index];
+			tmp[index]=str[i];
+			tmp[i]=c;
+			cout<<"i:"<<i<<" "<<index<<endl;
+			//对该字符串进行从index+1位置开始的子串进行递归
+			getCombineArray(tmp,index+1,length);
+		}
+	}
+	else //若将该字符子串递归完 则进行输出 
+	{
+			cout<<str<<endl;
+			++cnt;
+	}
+}
