@@ -1,0 +1,81 @@
+在进行数据的排序的时候归并排序和快速排序，两者都是稳定的排序算法。
+本人实做了两个算法的C/c++实现。
+归并排序：
+//归并
+void merge(int *arry,int first,int mid,int last)
+{
+	int first1,last1,first2,last2,index;
+	first1=first;
+	last1=mid;
+	first2=mid+1;
+	last2=last;
+	index=0;
+	//int *tmp=(int *)malloc((last-first+1)*sizeof(int));
+	int *tmp=new int[last-first+1];
+	if (tmp==NULL)
+	{
+		return ;
+	}
+	while ((first1<=last1)&&(first2<=last2))
+	{
+		if (arry[first1]<arry[first2])
+		{
+			tmp[index++]=arry[first1++];
+		}
+		else
+		{
+			tmp[index++]=arry[first2++];
+		}
+	}
+	while (first1<=last1)
+	{
+		tmp[index++]=arry[first1++];
+	}
+	while (first2<=last2)
+	{
+		tmp[index++]=arry[first2++];
+	}
+	for (int i=0;i<(last-first+1);++i)
+	{
+		arry[first+i]=tmp[i];
+	}
+}
+//归并排序
+void merge_sort(int *arry,int first,int last)
+{
+	int mid=0;
+	if (first<last)
+	{
+		mid=(first+last)/2;
+		merge_sort(arry,first,mid);
+		merge_sort(arry,mid+1,last);
+		merge(arry,first,mid,last);
+	}
+}
+
+快速排序：
+void quick_sort(int *arry,int first,int last)
+{
+	if (first<last)
+	{
+		int low,high;
+		low=first;
+		high=last;
+		int key=arry[low];
+		while(low<high)
+		{
+			while(low < high && arry[high] > key){
+				high--;
+			}
+			arry[low] =arry[high];  
+			while(low < high && arry[low] < key){
+				low++;
+			}
+			arry[high] = arry[low];
+		}
+		arry[low]=key;
+		quick_sort(arry,first,low-1);
+		quick_sort(arry,low+1,last);
+	}
+
+}
