@@ -1,0 +1,122 @@
+  最近遇到选取大数组（元素数N）中最小的K（K<N）的数的问题，解决该问题利用最大堆是一个很不错的解决方法。其主要思路就是依赖最大堆的特性：
+  1、堆中每个父节点的元素之都大于等于去子节点的元素值；
+  2、数组表示最大堆时，父节点和子节点的小标存在如下关系，父节点Parent(i)=[i/2];左节点Left(i)=[2*i];左节点Right(i)=[2*i+1];
+  利用最大堆进行最小K个数的选取的思路:
+  首先建立k个元素的最大堆（建堆的时间复杂度为o(k)），
+  并假设这就是最小的K个数，然后依次遍历剩余的N-K数与最大堆的堆定元素比较，若元素值小于Kmax(堆顶值),则更新堆（更新堆的时间复杂度为logK）,
+  则总的复杂度为o(k+(n-k)logk)->n*logk.
+  
+  首先实现最大堆的类，代码如下：
+  template<class T>
+class MaxHeap
+{
+public:
+	MaxHeap(int maxSize,int curSize,T data[]):m_maxSize(maxSize),m_curSize(curSize){
+		if (m_maxSize<m_curSize)
+		{
+			throw logic_error("Maximum size must no more less then current size.");
+		}
+		heap=new T[m_maxSize+1];
+		memset(heap,0,m_maxSize+1);
+		//拷贝数据到heap，从heap数组下标1开始，以确保最大堆排序的下标计算简单
+		copy(data,data+curSize,heap+1);
+	}
+	~MaxHeap(){
+		delete []heap;
+	}
+	//调整数组为最大堆
+	void Modify(int i){
+		int lhand=left(i);
+		int rhand=right(i);
+		int largest=i;
+		if (lhand<=m_curSize&&heap[largest]<heap[lhand])
+			largest=lhand;
+		if (rhand<=m_curSize&&heap[largest]<heap[rhand])
+			largest=rhand;
+		if (i!=largest)
+		{
+			swap(heap[largest],heap[i]);
+			Modify(largest);
+		}
+	}
+	//将数组建立成最大堆
+	void Bulid(){
+		for (int i = m_curSize/2; i >=1; --i)
+		{
+			Modify(i);
+		}
+	}
+	void update(int index,T value)
+	{
+	  if(index<1&&index>m_curSize)
+	    throw logic_error("Out of range.");
+	  head[indx]=value;
+	}
+	//返回最大值，即堆顶值
+	T Max(){
+		return heap[1];
+	}
+	//推出堆顶值，堆元素个数减少1，然后经过调整成新的最大堆
+	T Pop(){
+		if (m_curSize<=1)
+		{
+			throw logic_error("No element in max heap.")
+		}
+		T max=heap[1];
+		heap[1]=heap[m_curSize];
+		m_curSize--;
+		Modify(1);
+		return max;
+	}
+	
+	//最大堆排序，排序后不再为最大堆
+	void Sort(){
+		int tmp_size=m_curSize;
+		while (m_curSize>=1)
+		{
+			swap(heap[1],heap[m_curSize]);
+			--m_curSize;
+			MaxHeapify(1);
+		}
+		m_curSize=tmp_size;
+	}
+	//打印最大堆数组
+	void print(){
+		copy(heap+1,heap+m_curSize+1, ostream_iterator<T>(cout," "));
+		cout<<endl;
+	}
+private:
+	int m_maxSize;
+	int m_curSize;
+	T *heap;
+	//根节点与子节点的数组下标关系
+	int parent(int i){return i/2;}
+	int left(int i){return i*2;}
+	int right(int i){return i*2+1;}
+	void swap(T &lhand,	T &rhand){
+		T tmp=lhand;
+		lhand=rhand;
+		rhand=tmp;
+	}
+};
+
+以上即为最大推的实现，根据该类可实现选取最小K个数的算法：
+void selectMinK(int src[],const int N,const int K,int dest[])
+{
+  //获取数组的前K个元素值
+  copy(src,src+K+1,dest);
+  //创建最大堆
+   MaxHeap<int> myHeap(k,k,dest);
+   myHeap.Build();
+   //遍历剩余的N-K个数
+   for(int i=k;k<N;++i)
+   {
+      int top=myHeap.Max();
+      if(src[i]<top)
+      {
+        myHeap.update(1,src[i]);
+        //重新调整为最大堆
+        myHeap.Modfiy(1);
+      }
+   }
+}
