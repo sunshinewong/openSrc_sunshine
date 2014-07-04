@@ -1,0 +1,78 @@
+因新产品要发布，采用网络发布和升级的方式，考虑到网速和流量的因素，将应用程序中的exe和dll文件进行压缩，减少其大小，方便发布也减少安装时所需的物理空间。
+压缩采用的是开源的应用程序UPX，压缩效果很不错，但是one by one的压缩实在费时，因此写了一个批量压缩的脚本，减少工作量，小工具。具体代码如下：
+
+#python3.4
+
+import os
+import sys
+
+TYPE_DLL_EXE = (".dll",".exe")
+def operParam():
+    path={}
+    print(len(sys.argv))
+    for i in range(1,len(sys.argv)) :
+        print("i", i)
+        if sys.argv[i] in ('-h', '-H'):
+            print(compress.__doc__)
+            sys.exit()
+        elif sys.argv[i]  in ('-d', '-D'): 
+           path['dir'] = sys.argv[i+1]
+        elif sys.argv[i]  in ('-f', '-F'):
+           path['exe'] = sys.argv[i+1]
+    if len(path) != 2:
+        print(compress.__doc__)
+        sys.exit()
+    else : return path  
+
+def check(filename):
+    if os.path.splitext(filename)[1] in  TYPE_DLL_EXE :
+         print('The filename of type in (dll,exe) ：', filename)
+         return True      
+
+def getFilesName(filePath):
+    compressList=[]
+    if os.path.isdir(filePath):
+        for item in os.listdir(filePath) :
+            if os.path.isdir(item) :
+              getFilesName(item)
+            else: 
+                if  check(item):
+                    path =filePath+"\\"+item
+                    compressList.append(path)
+    else :
+        if check(filePath):
+                compressList.append(path)
+    return compressList
+
+def compress(dirpath, exepath):
+    '''
+    -h :help,get more infomation
+    -d  directorypath:dir,directory path to needed compress
+    -f  directorypath:directory path of upx.exe
+    Example:
+    The location of upx.exe is D:\\UPX
+    The directory which you would want to compress is D:\\dir
+    The command is:
+    python.exe upx.py -d D:\\dir -f d:\\UPX
+    '''
+    compressList=getFilesName(dirpath)
+    cmpress_command = "%s\\upx.exe --best" % exepath
+    for item in compressList :
+         cmpress_command =cmpress_command +' ' +item
+    print("upx command:", cmpress_command)
+    if os.system(cmpress_command) == 0:
+           print ('压缩成功')
+    else:
+         print (item,'压缩失败')
+
+if len(sys.argv)<2 :
+    print(compress.__doc__)
+    sys.exit()
+path=operParam()
+print("path:", path)
+compress(path['dir'], path['exe'])
+
+
+
+
+
